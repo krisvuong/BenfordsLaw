@@ -39,20 +39,14 @@ class BenfordsLaw{
    * @param double[] freqArr - the frequency of each digit from 1-9
    */
   public static void exportResults() throws IOException{
-    //temporary array
+    //temp array
     double[] temp = {29.10,32.94,10.67,4.05};
     
     //Create new CSV file
-    FileWriter fw = new FileWriter("DigitFrequency.csv", true);  //"true": if the file already exists, then data is added to the file rather than overwriting current data
-    BufferedWriter bw = new BufferedWriter(fw);
-    PrintWriter pw = new PrintWriter (bw);
+    FileWriter fw = new FileWriter("DigitFrequency.txt");
+    PrintWriter pw = new PrintWriter(fw);
     
-    //Write digit information into DigitFrequency.csv
-    pw.println();    //Start a new row for each customer's data
-    for(int i = 1; i<10; i++){
-      pw.println(i);
-    }
-    pw.close();    //Close PrintWriter
-    System.out.println("Hi");
+    pw.println("123");
+    pw.close();
   }
 }
