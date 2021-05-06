@@ -3,11 +3,15 @@
  * Teacher: Mr. Ho
  * Description: Benford's Law (Methods Part 2)
  */
+import java.util.Scanner;
+import java.io.*;
 
 class BenfordsLaw{
   public static void main(String[] args){
     
   }
+  
+  
+  
+  //add methods here
 }
-
-//add methods here
