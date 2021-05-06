@@ -43,7 +43,7 @@ class BenfordsLaw{
     double[] temp = {29.10,32.94,10.67,4.05};
     
     //Create new CSV file
-    FileWriter fw = new FileWriter("DigitFrequency.txt");
+    FileWriter fw = new FileWriter("bread.txt");
     PrintWriter pw = new PrintWriter(fw);
     
     pw.println("123");
