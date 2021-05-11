@@ -11,46 +11,48 @@ import java.net.URL;
 
 class BenfordsLaw {
   public static void main(String[] args) throws IOException {
-    //Declare array
-    double[] per = new double[9];
+    //Declare variables/array
+    double[] per = new double[9];  //contains frequency(%) of each digit 1-9
+    String fileDir = "no file selected";  //contains directory of user-selected file
     
     //Menu options
     String loadData = "1";
     String fraudCheck = "2";
-    String choice;
+    String choice = "1";  //user choice
     
     //Print main menu
-    choice = printMenu();
-    
-    //User chooses to load a sales file
-    if(choice.equals(loadData)){
-      //loadFile();
+    while((choice.equals(loadData))||(choice.equals(fraudCheck))){  //loop while user enters 1 or 2
+      choice = printMenu(fileDir);
+      
+      //User chooses to load a sales file
+      if(choice.equals(loadData)){
+        fileDir = loadFile();
+      }
+      
+      //User chooses to check for fraud
+      else if(choice.equals(fraudCheck)){
+        if(BLaw(per, fileDir) == true){  //true: they have already loaded a file // false: they have not loaded a file
+          exportResults(per);  //export DigitFrequency.csv IF a sales file is loaded
+        }
+      }
     }
-    
-    //User chooses to check for fraud
-    else if(choice.equals(fraudCheck)){
-      BLaw(per);
-      exportResults(per);
-    }
-    
     //User chooses to exit program
-    else{
-      System.out.println("Program end");
-    }
+    System.out.println("Program end");
   }
   
   /**
    * Print the main menu
    * 
    * @author - Kris Vuong
+   * @return String choice - String containing menu choice
    */
-  public static String printMenu(){
+  public static String printMenu(String fileDir){
     Scanner reader = new Scanner(System.in);
     
     //Prompt user choice
     System.out.println("What would you like to do?");
     System.out.println("[1] - load sales data");
-    System.out.println("[2] - check for fraud");
+    System.out.println("[2] - check for fraud in: [" + fileDir + "]");
     System.out.println("[any other key] - exit program");
     String choice = reader.nextLine();
     
@@ -58,9 +60,49 @@ class BenfordsLaw {
     
     return choice;
   }
+  
+  /**
+   * Load input file through user input
+   * 
+   * @author - Kris Vuong
+   * @return String fileDir - String containing directory of user-selected sales file
+   */
+  public static String loadFile() throws IOException{
+    
+    //Declare necessary variables
+    String fileDir; //user-inputted directory of sales file
+    boolean exists = false;  //true if user-inputted file exists
+    File temp;  //file containing sales data
+    
+    //Loop until valid directory is entered
+    while(exists == false){
+      Scanner reader = new Scanner(System.in);
+    
+      //Prompt file directory
+      System.out.println("Enter the sales file directory:");
+      fileDir = reader.nextLine();
+      reader.close();
+      
+      //Create instance of user-selected file
+      temp = new File(fileDir);
+      
+      //Check if the file exists
+      exists = temp.exists();
+      if(exists==true){
+        return fileDir;  //Return file directory
+      }
+      else{  //Reprompt if file/directory does not exist
+        System.out.println("This file/directory does not exist. Please try again.");
+      }
+    }
+    return "0";  //Arbitrary return value (will never occur)
+  }
 
-    public static void BLaw(double[] per) throws IOException {
-        String filename = "sales.csv";
+  
+  //RONALD, BENFORDS LAW (add docstring)
+    public static boolean BLaw(double[] per, String fileName) throws IOException {
+      try{
+        String filename = fileName;
         BufferedReader reader = new BufferedReader(new FileReader(filename));
         String line = reader.readLine();
         String[] arr = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
@@ -92,6 +134,16 @@ class BenfordsLaw {
             System.out.println("There is fraud.");
         }
         reader.close();
+        return true;
+      }
+      catch(FileNotFoundException e){
+        System.out.println("A file must be loaded before checking for fraud.");
+        return false;
+      }
+      catch(Exception e){
+        System.out.println("An error occured due to: " + e);
+        return false;
+      }
     }
     
   /*
@@ -102,11 +154,12 @@ class BenfordsLaw {
    */
   public static void exportResults(double[] per) throws IOException{
     Scanner reader = new Scanner(System.in);
-    //Create new CSV file
-    System.out.println();  //Create break between previous text (visual)
+    //Prompt name of CSV file
+    System.out.println();  //Create visual break between previous text
     System.out.println("A CSV file containing the sales digit frequencies was created. \nWhat would you like to name this file? (do not include extension)");
     String fileName = reader.nextLine() + ".csv";
     
+    //Create new CSV file
     FileWriter fw = new FileWriter(fileName);
     PrintWriter pw = new PrintWriter(fw);
     
@@ -125,5 +178,6 @@ class BenfordsLaw {
     System.out.println("File directory is " + myURL);
     
     pw.close();
+    reader.close();
   }
 }
