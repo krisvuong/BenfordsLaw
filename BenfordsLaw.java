@@ -16,14 +16,18 @@ class BenfordsLaw{
    * 
    * @author - Kris Vuong
    */
-  public static void printMenu(){
+  public static String printMenu(){
     Scanner reader = new Scanner(System.in);
     
+    //Prompt user choice
     System.out.println("What would you like to do?");
-    System.out.println("[1] load \"sales.csv\"");
-    System.out.println("[2] check for fraud");
+    System.out.println("[1] - load sales data");
+    System.out.println("[2] - check for fraud");
+    System.out.println("[any other key] - exit program");
     String choice = reader.nextLine();
     
     reader.close();
+    
+    return choice;
   }
 }
