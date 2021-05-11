@@ -5,12 +5,15 @@
  */
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
+import java.net.URL;
 
 class BenfordsLaw {
   public static void main(String[] args) throws IOException {
+    //Declare array
+    double[] per = new double[9];
+    
     //Menu options
     String loadData = "1";
     String fraudCheck = "2";
@@ -26,7 +29,8 @@ class BenfordsLaw {
     
     //User chooses to check for fraud
     else if(choice.equals(fraudCheck)){
-      BLaw();
+      BLaw(per);
+      exportResults(per);
     }
     
     //User chooses to exit program
@@ -55,7 +59,7 @@ class BenfordsLaw {
     return choice;
   }
 
-    public static void BLaw() throws IOException {
+    public static void BLaw(double[] per) throws IOException {
         String filename = "sales.csv";
         BufferedReader reader = new BufferedReader(new FileReader(filename));
         String line = reader.readLine();
@@ -74,7 +78,6 @@ class BenfordsLaw {
                 }
             }
         }
-        double [] per = new double [9];
         for (int i = 0; i < num.length; i++){
             per[i] = num[i];
             per[i] = per[i]/count;
@@ -90,4 +93,37 @@ class BenfordsLaw {
         }
         reader.close();
     }
+    
+  /*
+   * Export the digit frequency in a csv
+   * 
+   * @author - Kris Vuong
+   * @param double[] freqArr - the frequency of each digit from 1-9
+   */
+  public static void exportResults(double[] per) throws IOException{
+    Scanner reader = new Scanner(System.in);
+    //Create new CSV file
+    System.out.println();  //Create break between previous text (visual)
+    System.out.println("A CSV file containing the sales digit frequencies was created. \nWhat would you like to name this file? (do not include extension)");
+    String fileName = reader.nextLine() + ".csv";
+    
+    FileWriter fw = new FileWriter(fileName);
+    PrintWriter pw = new PrintWriter(fw);
+    
+    //Write the sales data into the CSV
+    pw.println("Digit, Frequency (%)");
+    for(int i = 0; i<9; i++){
+      pw.print(i+1 + ",");  //left column: digits 1-9
+      pw.println(per[i] + ",");  //right column: digit frequencies (%)
+    }
+    
+    //Print save success message and file directory
+    System.out.println("\"" + fileName + "\" was exported successfully.");
+    URL fileURL = BenfordsLaw.class.getResource(fileName);
+    String myURL = fileURL.toString();
+    myURL = (myURL.substring(5));
+    System.out.println("File directory is " + myURL);
+    
+    pw.close();
+  }
 }
