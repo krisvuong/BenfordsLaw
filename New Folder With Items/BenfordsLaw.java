@@ -7,9 +7,50 @@
 import java.io.*;
 import java.util.Scanner;
 import java.net.URL;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.stage.Stage;
 
-class BenfordsLaw {
-  public static void main(String[] args) throws IOException {
+public class BenfordsLaw extends Application {
+  @Override public void start(Stage stage) throws IOException {
+    String[] arr = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+    //the numbers for x-axis
+    stage.setTitle("Number Frequency");
+    //creates title of window
+    final CategoryAxis xAxis = new CategoryAxis();
+    final NumberAxis yAxis = new NumberAxis();
+    //creates x and y axis
+    final BarChart<String,Number> bc = 
+        new BarChart<String,Number>(xAxis,yAxis);
+      //format of x and y
+    bc.setTitle("Number Frequency");
+    //creates title of graph
+    xAxis.setLabel("Number");
+    //label for x-axis       
+    yAxis.setLabel("Percentage");
+    //label for y-axis
+    XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+    //creates one bar
+    double frequency[] = new double[9];
+    String filename = "sales.csv";
+    frequency = BLaw(frequency, filename);
+    for (int i = 0; i < arr.length; i++){
+      //goes through every number
+        series1.getData().add(new XYChart.Data<>(arr[i], frequency[i]));
+        //creates each value
+    }
+    Scene scene  = new Scene(bc,800,600);
+    //creates size of window
+    bc.getData().addAll(series1);
+    //makes of the bar for the graph
+    stage.setScene(scene);
+    stage.show();
+}
+    public static void main(String[] args) throws IOException {
         Scanner reader = new Scanner(System.in);
         //Declare variables/array
         double[] per = new double[9];  //contains frequency(%) of each digit 1-9
@@ -31,7 +72,25 @@ class BenfordsLaw {
           
           //User chooses to check for fraud
           else if(choice.equals(fraudCheck)){
-            if(BLaw(per, fileDir) == true){  //true: they have already loaded a file // false: they have not loaded a file
+            per = BLaw(per, fileDir);
+            //gets the digit frequencies
+            if(per[0] <= 100){  //true: they have already loaded a file // false: they have not loaded a file
+              for (int i = 0; i < per.length; i++){
+                //goes through each digit
+                System.out.println((i + 1) + ": " + per[i] + "%");
+                //gives frequency of each digit
+              }
+              if (per[0] >= 29 && per[0] <= 32){
+                System.out.println("There is no fraud");
+              }
+            else {
+                System.out.println("There is fraud.");
+              }
+              //tells if there is fraud or not
+              System.out.println("To continue program close the graph");
+              //tells user to close graph if they want to continue the program
+              launch(args);
+              //creates graph
               exportResults(per, reader);  //export DigitFrequency.csv IF a sales file is loaded
             }
           }
@@ -92,8 +151,14 @@ class BenfordsLaw {
       }
     
       
-      //RONALD, BENFORDS LAW (add docstring)
-        public static boolean BLaw(double[] per, String fileName) throws IOException {
+      /*
+      * @author - Ronald Ng 
+      * Description - Finds the distributions of the first digits
+      *
+      * @param - per the double array that is used to stores the percent distrubtions of the digits, fileName the name of the file to examine the distrubtions of the digits
+      * @return - returns the double array that contains all the percent distrubtiond
+      */
+        public static double[] BLaw(double[] per, String fileName) throws IOException {
           try{
             String filename = fileName;
             BufferedReader reader = new BufferedReader(new FileReader(filename));
@@ -118,24 +183,18 @@ class BenfordsLaw {
                 per[i] = per[i]/count;
                 per[i] = Math.round(per[i]*1000);
                 per[i] = per[i]/10;
-                System.out.println(arr[i] + ": " + per[i] + "%");
-            }
-            if (per[0] >= 29 && per[0] <= 32){
-                System.out.println("There is no fraud");
-            }
-            else {
-                System.out.println("There is fraud.");
             }
             reader.close();
-            return true;
+            return per;
           }
           catch(FileNotFoundException e){
             System.out.println("A file must be loaded before checking for fraud.");
-            return false;
+            double err[] = {1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000};
+            return err;
           }
           catch(Exception e){
-            System.out.println("An error occured due to: " + e);
-            return false;
+            double err[] = {1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000};
+            return err;
           }
         }
         
