@@ -90,8 +90,8 @@ public class BenfordsLaw extends Application {
               System.out.println("To continue program close the graph");
               //tells user to close graph if they want to continue the program
               launch(args);
-              //creates graph
-              exportResults(per, reader);  //export DigitFrequency.csv IF a sales file is loaded
+              //creates chart
+              exportResults(per, reader);  //export sales file IF a sales file is loaded
             }
           }
         }
