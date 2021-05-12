@@ -74,19 +74,19 @@ public class BenfordsLaw extends Application {
           else if(choice.equals(fraudCheck)){
             per = BLaw(per, fileDir);
             //gets the digit frequencies
-            if(per[0] <= 100){  //true: they have already loaded a file // false: they have not loaded a file
+            if(per[0] <= 100){
               for (int i = 0; i < per.length; i++){
-                //goes through each digit
+                //Prints each digit frequency
                 System.out.println((i + 1) + ": " + per[i] + "%");
-                //gives frequency of each digit
               }
+              
+              //States likelihood of fraud
               if (per[0] >= 29 && per[0] <= 32){
                 System.out.println("There is no fraud");
               }
-            else {
+              else {
                 System.out.println("There is fraud.");
               }
-              //tells if there is fraud or not
               System.out.println("To continue program close the graph");
               //tells user to close graph if they want to continue the program
               launch(args);
